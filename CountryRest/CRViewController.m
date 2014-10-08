@@ -7,8 +7,15 @@
 //
 
 #import "CRViewController.h"
+#import "CountryController.h"
 
 @interface CRViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *searchField;
+@property (weak, nonatomic) IBOutlet UILabel *countryNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *countryCapitalLabel;
+@property (weak, nonatomic) IBOutlet UILabel *countryPopulationLabel;
+
+- (IBAction)searchTapped:(UIButton *)sender;
 
 @end
 
@@ -26,4 +33,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)searchTapped:(UIButton *)sender
+{
+    [[CountryController sharedInstance] getCountriesWithName:self.searchField.text withCompletion:
+     ^(NSArray *countries)
+    {
+        NSDictionary *country = countries.firstObject;
+        self.countryNameLabel.text = country[@"name"];
+        self.countryCapitalLabel.text = country[@"capital"];
+        NSNumber *pop = country[@"population"];
+        self.countryPopulationLabel.text = pop.description;
+    }];
+}
 @end
